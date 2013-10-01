@@ -8,21 +8,21 @@ EPEL_VERSION=6
 # for Centos5
 # OPTIONS=-r epel-5-x86_64 --verbose
 
-# for Centos6 
+# for Centos6
 # OPTIONS=-r epel-6-x86_64 --verbose
 
 # For universal build version
-OPTIONS=-r epel-$(EPEL_VERSION)-x86_64 
+OPTIONS=-r epel-$(EPEL_VERSION)-x86_64
 
 
 # used for building the build packages, like python27-build and ruby193-build
-SCL_OPTIONS=-r scl-x86_64 
+SCL_OPTIONS=-r scl-x86_64
 
 # used for building python27 SCL-based packages
-PYTHON27_OPTIONS=-r python27-x86_64 
+PYTHON27_OPTIONS=-r python27-x86_64  --no-clean --no-cleanup-after --verbose
 
 # used for bulding ruby193 SCL-based packages
-RUBY193_OPTIONS=-r ruby193-x86_64 
+RUBY193_OPTIONS=-r ruby193-x86_64
 
 ROOT=/home/vagrant/build
 PHANTOMJS_VER=1.8.1-1
@@ -38,7 +38,7 @@ default:
 	@echo
 	@echo "                 OPTIONS=$(OPTIONS)"
 	@echo "    [EPEL6 only] SCL_OPTIONS=$(SCL_OPTIONS)"
-	@echo "    [EPEL6 only] PYTHON27_OPTIONS=$(PYTHON27_OPTIONS)" 
+	@echo "    [EPEL6 only] PYTHON27_OPTIONS=$(PYTHON27_OPTIONS)"
 	@echo "    [EPEL6 only] RUBY193_OPTIONS=$(RUBY193_OPTIONS)"
 	@echo ""
 
@@ -50,25 +50,25 @@ createrepo:
 	mkdir -p ~/localrepo/epel/$(EPEL_VERSION)/x86_64/
 	cp -v $(ROOT)/RPMS/*el$(EPEL_VERSION)*x86_64.rpm ~/localrepo/epel/$(EPEL_VERSION)/x86_64/
 	createrepo ~/localrepo/epel/$(EPEL_VERSION)/x86_64/
-	
-.PHONY: 
-hdf5:	
+
+.PHONY:
+hdf5:
 	mock $(OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/hdf5.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
 	mock $(OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/hdf5-1.8.10-3.el$(EPEL_VERSION).src.rpm
 
 .PHONY: ecryptfs-utils
-.PHONY: 
-git:	
+.PHONY:
+git:
 	mock $(OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/git.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
 	mock $(OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/git-1.8.2.1-1.el$(EPEL_VERSION).src.rpm
 
 .PHONY: ecryptfs-utils
-ecryptfs-utils:	
+ecryptfs-utils:
 	mock $(OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/ecryptfs-utils.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
 	mock $(OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/ecryptfs-utils-103-1.el$(EPEL_VERSION).centos.src.rpm
 
 .PHONY: nodejs
-nodejs:	
+nodejs:
 	mock $(OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/nodejs.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
 	mock $(OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/nodejs-0.8.15-1.el$(EPEL_VERSION).centos.src.rpm
 
@@ -84,16 +84,25 @@ $(ROOT)/RPMS/phantomjs-$(PHANTOMJS_VER).el$(EPEL_VERSION).centos.x86_64.rpm: $(R
 # These are the actual python27, python27-build and python27-python packages
 # This will also update the repository with the package in it, because it's a dependency for everyone else
 
+.PHONY: python-all
+python-all: python27 python27-expat python27-python python27-python MySQL-python python-mod_wsgi python-pip python-virtualenv
+
 .PHONY: python27
 python27:
 	mock $(SCL_OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/python27.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
 	mock $(SCL_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python27-1-3.el$(EPEL_VERSION).src.rpm
 	make EPEL_VERSION=$(EPEL_VERSION) createrepo
 
+.PHONY: python27-expat
+python27-expat:
+	mock $(PYTHON27_OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/python-expat.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
+	mock $(PYTHON27_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python27-python-expat-2.1.0-4.el$(EPEL_VERSION).src.rpm
+	make EPEL_VERSION=$(EPEL_VERSION) createrepo
+
 .PHONY: python27-python
 python27-python:
 	mock $(PYTHON27_OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/python.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
-	mock $(PYTHON27_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python-2.7.3-16.el$(EPEL_VERSION).src.rpm
+	mock $(PYTHON27_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python27-python-2.7.3-16.el$(EPEL_VERSION).src.rpm
 	make EPEL_VERSION=$(EPEL_VERSION) createrepo
 
 
@@ -126,7 +135,7 @@ python-virtualenv:
 
 
 # These are the actual ruby193, ruby193-build, and ruby193-ruby packages
-# This will also update the local repository to put the package(s) out in 
+# This will also update the local repository to put the package(s) out in
 # that repo, because other builds will depend on it being available
 
 .PHONY: ruby193
@@ -141,13 +150,13 @@ ruby193-libyaml:
 	mock $(RUBY193_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/ruby193-libyaml-0.1.4-4.el$(EPEL_VERSION).src.rpm
 	make EPEL_VERSION=$(EPEL_VERSION) createrepo
 
-.PHONY: ruby193-ruby 
+.PHONY: ruby193-ruby
 ruby193-ruby:
 	mock $(RUBY193_OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/ruby.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
 	mock $(RUBY193_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/ruby193-ruby-1.9.3.327-27.el$(EPEL_VERSION).src.rpm
 	make EPEL_VERSION=$(EPEL_VERSION) createrepo
 
-# These are the actual ruby 193 rubygems. 
+# These are the actual ruby 193 rubygems.
 
 .PHONY: ruby193-rubygem-rcov
 ruby193-rubygem-rcov:
