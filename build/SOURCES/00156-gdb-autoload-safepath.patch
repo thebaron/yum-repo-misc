@@ -1,7 +1,7 @@
-diff -up Python-2.7.3/Lib/test/test_gdb.py.gdb-autoload-safepath Python-2.7.3/Lib/test/test_gdb.py
---- Python-2.7.3/Lib/test/test_gdb.py.gdb-autoload-safepath	2012-04-30 15:53:57.254045220 -0400
-+++ Python-2.7.3/Lib/test/test_gdb.py	2012-04-30 16:19:19.569941124 -0400
-@@ -54,6 +54,19 @@ def gdb_has_frame_select():
+diff -up Python-3.2.3/Lib/test/test_gdb.py.gdb-autoload-safepath Python-3.2.3/Lib/test/test_gdb.py
+--- Python-3.2.3/Lib/test/test_gdb.py.gdb-autoload-safepath	2012-04-30 17:16:24.092706954 -0400
++++ Python-3.2.3/Lib/test/test_gdb.py	2012-04-30 17:17:13.275703592 -0400
+@@ -46,6 +46,19 @@ def gdb_has_frame_select():
  
  HAS_PYUP_PYDOWN = gdb_has_frame_select()
  
@@ -14,14 +14,14 @@ diff -up Python-2.7.3/Lib/test/test_gdb.py.gdb-autoload-safepath Python-2.7.3/Li
 +    p = subprocess.Popen(["gdb", "--batch", cmd],
 +                         stderr=subprocess.PIPE)
 +    _, stderr = p.communicate()
-+    return '"on" or "off" expected.' not in stderr
++    return b'"on" or "off" expected.' not in stderr
 +    
 +HAS_AUTOLOAD_SAFEPATH = gdb_has_autoload_safepath()
 +
- class DebuggerTests(unittest.TestCase):
+ BREAKPOINT_FN='builtin_id'
  
-     """Test that the debugger can debug Python."""
-@@ -112,15 +125,28 @@ class DebuggerTests(unittest.TestCase):
+ class DebuggerTests(unittest.TestCase):
+@@ -106,15 +119,28 @@ class DebuggerTests(unittest.TestCase):
                      'set print entry-values no',
  
                      'run']
