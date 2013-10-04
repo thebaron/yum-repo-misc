@@ -68,7 +68,7 @@
 #
 # These errors are ignored by the normal python build, and aren't normally a
 # problem in the buildroots since /usr/bin/python isn't present.
-# 
+#
 # However, for the case where we're rebuilding the python srpm on a machine
 # that does have python installed we need to set this to avoid
 # brp-python-bytecompile treating these as fatal errors:
@@ -89,7 +89,7 @@
 #   patch 52 (valgrind)
 #   patch 55 (systemtap)
 #   patch 145 (linux2)
-# 
+#
 # For patch 55 (systemtap), we need to get a new header for configure to use
 #
 # configure.in requires autoconf-2.65, but the version in Fedora is currently
@@ -195,16 +195,16 @@ Source2: pythondeps-scl.sh
 # Systemtap tapset to make it easier to use the systemtap static probes
 # (actually a template; LIBRARY_PATH will get fixed up during install)
 # Written by dmalcolm; not yet sent upstream
-Source3: libpython.stp
+Source3: libpython.python27.stp
 
 
 # Example systemtap script using the tapset
 # Written by wcohen, mjw, dmalcolm; not yet sent upstream
-Source4: systemtap-example.stp
+Source4: systemtap-example.python27.stp
 
 # Another example systemtap script that uses the tapset
 # Written by dmalcolm; not yet sent upstream
-Source5: pyfuntop.stp
+Source5: pyfuntop.python27.stp
 
 # Supply various useful macros for building python 2 modules:
 #  __python2, python2_sitelib, python2_sitearch, python2_version
@@ -243,7 +243,7 @@ Source7: brp-python-bytecompile-with-scl-python
 #     - unicodedata unicodedata.c    # static Unicode character database
 #     - _locale _localemodule.c
 #     - fcntl fcntlmodule.c	# fcntl(2) and ioctl(2)
-#     - spwd spwdmodule.c		# spwd(3) 
+#     - spwd spwdmodule.c		# spwd(3)
 #     - grp grpmodule.c		# grp(3)
 #     - select selectmodule.c	# select(2); not on ancient System V
 #     - mmap mmapmodule.c  # Memory-mapped files
@@ -300,22 +300,22 @@ Patch4: python-2.5-cflags.patch
 # though the proposed upstream patches are, alas, different
 Patch6: python-2.5.1-plural-fix.patch
 
-# This patch was listed in the changelog as: 
+# This patch was listed in the changelog as:
 #  * Fri Sep 14 2007 Jeremy Katz <katzj@redhat.com> - 2.5.1-11
-#  - fix encoding of sqlite .py files to work around weird encoding problem 
+#  - fix encoding of sqlite .py files to work around weird encoding problem
 #  in Turkish (#283331)
 # A traceback attached to rhbz 244016 shows the problem most clearly: a
 # traceback on attempting to import the sqlite module, with:
 #   "SyntaxError: encoding problem: with BOM (__init__.py, line 1)"
 # This seems to come from Parser/tokenizer.c:check_coding_spec
 # Our patch changes two source files within sqlite3, removing the
-# "coding: ISO-8859-1" specs and character E4 = U+00E4 = 
-# LATIN SMALL LETTER A WITH DIAERESIS from in ghaering's surname. 
+# "coding: ISO-8859-1" specs and character E4 = U+00E4 =
+# LATIN SMALL LETTER A WITH DIAERESIS from in ghaering's surname.
 #
 # It may be that the conversion of "ISO-8859-1" to "iso-8859-1" is thwarted
 # by the implementation of "tolower" in the Turkish locale; see:
 #   https://bugzilla.redhat.com/show_bug.cgi?id=191096#c9
-# 
+#
 # TODO: Not yet sent upstream, and appears to me (dmalcolm 2010-01-29) that
 # it may be papering over a symptom
 Patch7: python-2.5.1-sqlite-encoding.patch
@@ -354,7 +354,7 @@ Patch17: python-2.6.4-distutils-rpath.patch
 # fixed up by mjw and wcohen for 2.6.2, then fixed up by dmalcolm for 2.6.4
 # then rewritten by mjw (attachment 390110 of rhbz 545179), then reformatted
 # for 2.7rc1 by dmalcolm:
-Patch55: 00055-systemtap.patch
+Patch55: 00055-systemtap.python27.patch
 
 # Upstream as of Python 2.7.4
 #  Patch101: 00101-lib64-regex.patch
@@ -375,22 +375,22 @@ Patch103: python-2.7-lib64-sysconfig.patch
 # 00104 #
 # Only used when "%{_lib}" == "lib64"
 # Another lib64 fix, for distutils/tests/test_install.py; not upstream:
-Patch104: 00104-lib64-fix-for-test_install.patch
+Patch104: 00104-lib64-fix-for-test_install.python27.patch
 
 # 00111 #
 # Patch the Makefile.pre.in so that the generated Makefile doesn't try to build
 # a libpythonMAJOR.MINOR.a (bug 550692):
 # Downstream only: not appropriate for upstream
-Patch111: 00111-no-static-lib.patch
+Patch111: 00111-no-static-lib.python27.patch
 
 # 00112 #
 # Patch to support building both optimized vs debug stacks DSO ABIs, sharing
 # the same .py and .pyc files, using "_d.so" to signify a debug build of an
 # extension module.
 #
-# Based on Debian's patch for the same, 
+# Based on Debian's patch for the same,
 #  http://patch-tracker.debian.org/patch/series/view/python2.6/2.6.5-2/debug-build.dpatch
-# 
+#
 # (which was itself based on the upstream Windows build), but with some
 # changes:
 #
@@ -409,7 +409,7 @@ Patch111: 00111-no-static-lib.patch
 # to add the _d there, when building an extension.  This way, "make sharedlibs"
 # can build ctypes, by finding the sysmtem libffi.so (rather than failing to
 # find "libffi_d.so"), and builds the module as _ctypes_d.so
-#   
+#
 #   * Similarly, update build_ext:get_libraries handling of Py_ENABLE_SHARED by
 # appending "_d" to the python library's name for the debug configuration
 #
@@ -454,13 +454,13 @@ Patch112: python-2.7.3-debug-build.patch
 # so that if they are enabled, they will be in that build's pyconfig.h, so that
 # extension modules will reliably use them
 # Not yet sent upstream
-Patch113: 00113-more-configuration-flags.patch
+Patch113: 00113-more-configuration-flags.python27.patch
 
 # 00114 #
 # Add flags for statvfs.f_flag to the constant list in posixmodule (i.e. "os")
 # (rhbz:553020); partially upstream as http://bugs.python.org/issue7647
 # Not yet sent upstream
-Patch114: 00114-statvfs-f_flag-constants.patch
+Patch114: 00114-statvfs-f_flag-constants.python27.patch
 
 # Upstream as of Python 2.7.3:
 #  Patch115: make-pydoc-more-robust-001.patch
@@ -488,7 +488,7 @@ Patch121: 00121-add-Modules-to-build-path.patch
 # use the debug build.  Add a "PYTHONDUMPCOUNTS" environment variable which
 # must be set to enable the output on exit
 # Not yet sent upstream
-Patch125: 00125-less-verbose-COUNT_ALLOCS.patch
+Patch125: 00125-less-verbose-COUNT_ALLOCS.python27.patch
 
 # Upstream as of Python 2.7.5
 #  Patch126: fix-dbm_contains-on-64bit-bigendian.patch
@@ -524,7 +524,7 @@ Patch130: python-2.7.2-add-extension-suffix-to-python-config.patch
 # fail when built in Koji, for ppc and ppc64; for some reason, the SIGALRM
 # handlers are never called, and the call to write runs to completion
 # (rhbz#732998)
-Patch131: 00131-disable-tests-in-test_io.patch
+Patch131: 00131-disable-tests-in-test_io.python27.patch
 
 # 00132 #
 # Add non-standard hooks to unittest for use in the "check" phase below, when
@@ -538,7 +538,7 @@ Patch131: 00131-disable-tests-in-test_io.patch
 # environment, which we set manually in the appropriate portion of the "check"
 # phase below (and which potentially other python-* rpms could set, to reuse
 # these unittest hooks in their own "check" phases)
-Patch132: 00132-add-rpmbuild-hooks-to-unittest.patch
+Patch132: 00132-add-rpmbuild-hooks-to-unittest.python27.patch
 
 # 00133 #
 # "dl" is deprecated, and test_dl doesn't work on 64-bit builds:
@@ -547,7 +547,7 @@ Patch133: 00133-skip-test_dl.patch
 # 00134 #
 # Fix a failure in test_sys.py when configured with COUNT_ALLOCS enabled
 # Not yet sent upstream
-Patch134: 00134-fix-COUNT_ALLOCS-failure-in-test_sys.patch
+Patch134: 00134-fix-COUNT_ALLOCS-failure-in-test_sys.python27.patch
 
 # 00135 #
 # Skip "test_callback_in_cycle_resurrection" in a debug build, where it fails:
@@ -561,7 +561,7 @@ Patch136: 00136-skip-tests-of-seeking-stdin-in-rpmbuild.patch
 
 # 00137 #
 # Some tests within distutils fail when run in an rpmbuild:
-Patch137: 00137-skip-distutils-tests-that-fail-in-rpmbuild.patch
+Patch137: 00137-skip-distutils-tests-that-fail-in-rpmbuild.python27.patch
 
 # 00138 #
 # Fixup some tests within distutils to work with how debug builds are set up:
@@ -570,7 +570,7 @@ Patch138: 00138-fix-distutils-tests-in-debug-build.patch
 # 00139 #
 # ARM-specific: skip known failure in test_float:
 #  http://bugs.python.org/issue8265 (rhbz#706253)
-Patch139: 00139-skip-test_float-known-failure-on-arm.patch
+Patch139: 00139-skip-test_float-known-failure-on-arm.python27.patch
 
 # 00140 #
 # Sparc-specific: skip known failure in test_ctypes:
@@ -581,17 +581,17 @@ Patch140: 00140-skip-test_ctypes-known-failure-on-sparc.patch
 # 00141 #
 # Fix test_gc's test_newinstance case when configured with COUNT_ALLOCS:
 # Not yet sent upstream
-Patch141: 00141-fix-test_gc_with_COUNT_ALLOCS.patch
+Patch141: 00141-fix-test_gc_with_COUNT_ALLOCS.python27.patch
 
 # 00142 #
 # Some pty tests fail when run in mock (rhbz#714627):
-Patch142: 00142-skip-failing-pty-tests-in-rpmbuild.patch
+Patch142: 00142-skip-failing-pty-tests-in-rpmbuild.python27.patch
 
 # 00143 #
 # Fix the --with-tsc option on ppc64, and rework it on 32-bit ppc to avoid
 # aliasing violations (rhbz#698726)
 # Sent upstream as http://bugs.python.org/issue12872
-Patch143: 00143-tsc-on-ppc.patch
+Patch143: 00143-tsc-on-ppc.python27.patch
 
 # 00144 #
 # (Optionally) disable the gdbm module:
@@ -617,7 +617,7 @@ Patch144: 00144-no-gdbm.patch
 #   of hashlib (for example, md5.py will use _hashlib's implementation of MD5,
 #   if permitted by the FIPS setting)
 # (rhbz#563986)
-Patch146: 00146-hashlib-fips.patch
+Patch146: 00146-hashlib-fips.python27.patch
 
 # 00147 #
 # Add a sys._debugmallocstats() function
@@ -652,7 +652,7 @@ Patch147: 00147-add-debug-malloc-stats.patch
 # when running test_gdb.py; also cope with change to gdb in F17 onwards in
 # which values are printed as "v@entry" rather than just "v":
 # Not yet sent upstream
-Patch153: 00153-fix-test_gdb-noise.patch
+Patch153: 00153-fix-test_gdb-noise.python27.patch
 
 # 00154 #
 # python3.spec on f15 has:
@@ -662,14 +662,14 @@ Patch153: 00153-fix-test_gdb-noise.patch
 # Avoid allocating thunks in ctypes unless absolutely necessary, to avoid
 # generating SELinux denials on "import ctypes" and "import uuid" when
 # embedding Python within httpd (rhbz#814391)
-Patch155: 00155-avoid-ctypes-thunks.patch
+Patch155: 00155-avoid-ctypes-thunks.python27.patch
 
 # 00156 #
 # Recent builds of gdb will only auto-load scripts from certain safe
 # locations.  Turn off this protection when running test_gdb in the selftest
 # suite to ensure that it can load our -gdb.py script (rhbz#817072):
 # Not yet sent upstream
-Patch156: 00156-gdb-autoload-safepath.patch
+Patch156: 00156-gdb-autoload-safepath.python27.patch
 
 # 00157 #
 # Update uid/gid handling throughout the standard library: uid_t and gid_t are
@@ -685,7 +685,7 @@ Patch156: 00156-gdb-autoload-safepath.patch
 # Update standard library to use this throughout for uid/gid values, so that
 # very large uid/gid values are round-trippable, and -1 remains usable.
 # (rhbz#697470)
-Patch157: 00157-uid-gid-overflows.patch
+Patch157: 00157-uid-gid-overflows.python27.patch
 
 # Upstream as of Python 2.7.4
 # Patch158: 00158-fix-hashlib-leak.patch
@@ -772,7 +772,7 @@ Patch169: 00169-avoid-implicit-usage-of-md5-in-multiprocessing.patch
 # hiding the proposed new macros/functions within gcmodule.c to avoid exposing
 # them within the extension API.
 # (rhbz#850013)
-Patch170: 00170-gc-assertions.patch
+Patch170: 00170-gc-assertions.python27.patch
 
 # Upstream as of Python 2.7.4
 #  Patch171: 00171-raise-correct-exception-when-dev-urandom-is-missing.patch
@@ -784,7 +784,7 @@ Patch170: 00170-gc-assertions.patch
 # Workaround for ENOPROTOOPT seen in Koji within
 # test.test_support.bind_port()
 # (rhbz#913732)
-Patch173: 00173-workaround-ENOPROTOOPT-in-bind_port.patch
+Patch173: 00173-workaround-ENOPROTOOPT-in-bind_port.python27.patch
 
 # 00174 #
 # Workaround for failure to set up prefix/exec_prefix when running
@@ -821,7 +821,7 @@ Patch174: 00174-fix-for-usr-move.patch
 # 00180 #
 # Enable building on ppc64p7
 # Not appropriate for upstream, Fedora-specific naming
-Patch180: 00180-python-add-support-for-ppc64p7.patch
+Patch180: 00180-python-add-support-for-ppc64p7.python27.patch
 
 # 00181 #
 # Allow arbitrary timeout for Condition.wait, as reported in
@@ -864,7 +864,7 @@ Patch183: 00183-CVE-2013-4238-hostname-check-bypass-in-SSL-module.patch
 # This is the generated patch to "configure"; see the description of
 #   %{regenerate_autotooling_patch}
 # above:
-Patch5000: 05000-autotool-intermediates.patch
+Patch5000: 05000-autotool-intermediates.python27.patch
 
 
 # ======================================================
@@ -874,7 +874,7 @@ Patch5000: 05000-autotool-intermediates.patch
 %if %{main_python}
 Obsoletes: %{?scl_prefix}Distutils
 Provides: %{?scl_prefix}Distutils
-Obsoletes: %{?scl_prefix}python2 
+Obsoletes: %{?scl_prefix}python2
 Provides: %{?scl_prefix}python2 = %{version}
 Obsoletes: %{?scl_prefix}python-elementtree <= 1.2.6
 Obsoletes: %{?scl_prefix}python-sqlite < 2.3.2
@@ -970,9 +970,9 @@ Provides: %{?scl_prefix}python2-tools = %{version}
 %endif
 
 %description tools
-This package includes several tools to help with the development of Python   
-programs, including IDLE (an IDE with editing and debugging facilities), a 
-color editor (pynche), and a python gettext program (pygettext.py).  
+This package includes several tools to help with the development of Python
+programs, including IDLE (an IDE with editing and debugging facilities), a
+color editor (pynche), and a python gettext program (pygettext.py).
 
 %package -n %{?scl_prefix}%{tkinter}
 Summary: A graphical user interface for the Python scripting language
@@ -1244,7 +1244,7 @@ exit 1
 # Define a function, for how to perform a "build" of python for a given
 # configuration:
 BuildPython() {
-  ConfName=$1	      
+  ConfName=$1
   BinaryName=$2
   SymlinkName=$3
   ExtraConfigArgs=$4
@@ -1350,7 +1350,7 @@ done
 
 InstallPython() {
 
-  ConfName=$1	      
+  ConfName=$1
   BinaryName=$2
   PyInstSoName=$3
   MoreCFlags=$4
@@ -1376,7 +1376,7 @@ make install DESTDIR=%{buildroot} EXTRA_CFLAGS="$MoreCFlags"
 #
 # See https://fedoraproject.org/wiki/Features/EasierPythonDebugging for more
 # information
-# 
+#
 # Initially I tried:
 #  /usr/lib/libpython2.6.so.1.0-gdb.py
 # but doing so generated noise when ldconfig was rerun (rhbz:562980)
@@ -1420,7 +1420,7 @@ InstallPython optimized \
   %{py_INSTSONAME_optimized}
 
 
-# Fix the interpreter path in binaries installed by distutils 
+# Fix the interpreter path in binaries installed by distutils
 # (which changes them by itself)
 # Make sure we preserve the file permissions
 for fixed in %{buildroot}%{_bindir}/pydoc; do
@@ -1578,7 +1578,7 @@ for Module in %{buildroot}/%{dynload_dir}/*.so ; do
     *_d.so)
         ldd $Module | grep %{py_INSTSONAME_optimized} &&
             (echo Debug module $Module linked against optimized %{py_INSTSONAME_optimized} ; exit 1)
-            
+
         ;;
     *)
         ldd $Module | grep %{py_INSTSONAME_debug} &&
@@ -1840,7 +1840,7 @@ rm -fr %{buildroot}
 %dir %{_datadir}/systemtap
 %dir %{tapsetdir}
 %{tapsetdir}/%{libpython_stp_optimized}
-%doc systemtap-example.stp pyfuntop.stp
+%doc systemtap-example.python27.stp pyfuntop.python27.stp
 %endif
 
 %files devel
@@ -2029,15 +2029,15 @@ rm -fr %{buildroot}
 
 # We put the debug-gdb.py file inside /usr/lib/debug to avoid noise from
 # ldconfig (rhbz:562980).
-# 
+#
 # The /usr/lib/rpm/redhat/macros defines %__debug_package to use
 # debugfiles.list, and it appears that everything below /usr/lib/debug and
 # (/usr/src/debug) gets added to this file (via LISTFILES) in
 # /usr/lib/rpm/find-debuginfo.sh
-# 
+#
 # Hence by installing it below /usr/lib/debug we ensure it is added to the
 # -debuginfo subpackage
-# (if it doesn't, then the rpmbuild ought to fail since the debug-gdb.py 
+# (if it doesn't, then the rpmbuild ought to fail since the debug-gdb.py
 # payload file would be unpackaged)
 
 
@@ -2658,7 +2658,7 @@ directories (bug 531901)
 - fix marshalling of objects in xmlrpclib (python bug #1739842)
 
 * Fri Sep 14 2007 Jeremy Katz <katzj@redhat.com> - 2.5.1-11
-- fix encoding of sqlite .py files to work around weird encoding problem 
+- fix encoding of sqlite .py files to work around weird encoding problem
   in Turkish (#283331)
 
 * Mon Sep 10 2007 Jeremy Katz <katzj@redhat.com> - 2.5.1-10
@@ -2681,7 +2681,7 @@ directories (bug 531901)
 
 * Wed Jun 27 2007 Jeremy Katz <katzj@redhat.com> - 2.5.1-4
 - fix _elementtree.so build (#245703)
-- ensure that extension modules we expect are actually built rather than 
+- ensure that extension modules we expect are actually built rather than
   having them silently fall out of the package
 
 * Tue Jun 26 2007 Jeremy Katz <katzj@redhat.com> - 2.5.1-3
@@ -2723,7 +2723,7 @@ directories (bug 531901)
 
 * Mon Dec 11 2006 Jeremy Katz <katzj@redhat.com> - 2.5.3-3
 - fix atexit traceback with failed syslog logger (#218214)
-- split libpython into python-libs subpackage for multilib apps 
+- split libpython into python-libs subpackage for multilib apps
   embedding python interpreters
 
 * Wed Dec  6 2006 Jeremy Katz <katzj@redhat.com> - 2.5.3-2
@@ -2731,14 +2731,14 @@ directories (bug 531901)
 
 * Tue Dec  5 2006 Jeremy Katz <katzj@redhat.com>
 - support db 4.5
-- obsolete python-elementtree; since it requires some code tweaks, don't 
+- obsolete python-elementtree; since it requires some code tweaks, don't
   provide it
 - obsolete old python-sqlite; provide the version that's actually included
 
 * Mon Oct 30 2006 Jeremy Katz <katzj@redhat.com>
 - fix _md5 and _sha modules (Robert Sheck)
 - no longer provide optik compat; it's been a couple of years now
-- no longer provide the old shm module; if this is still needed, let's 
+- no longer provide the old shm module; if this is still needed, let's
   build it separately
 - no longer provide japanese codecs; should be a separate package
 
@@ -2839,7 +2839,7 @@ directories (bug 531901)
 - Fix bug #169046 more correctly.
 
 * Thu Sep 22 2005 Mihai Ibanescu <misa@redhat.com> 2.4.1-7
-- Fixed bug #169046 (realpath is unsafe); thanks to 
+- Fixed bug #169046 (realpath is unsafe); thanks to
   Peter Jones <pjones@redhat.com> and Arjan van de Ven <arjanv@redhat.com> for
   diagnosing and the patch.
 
@@ -3028,11 +3028,11 @@ directories (bug 531901)
 - Fixed bug #84966: path in byte-compiled code still wrong
 
 * Thu Feb 20 2003 Jeremy Katz <katzj@redhat.com> 2.2.2-23
-- ftp uri's should be able to specify being rooted at the root instead of 
+- ftp uri's should be able to specify being rooted at the root instead of
   where you login via ftp (#84692)
 
 * Mon Feb 10 2003 Mihai Ibanescu <misa@redhat.com> 2.2.2-22
-- Using newer Japanese codecs (1.4.9). Thanks to 
+- Using newer Japanese codecs (1.4.9). Thanks to
   Peter Bowen <pzb@datastacks.com> for pointing this out.
 
 * Thu Feb  6 2003 Mihai Ibanescu <misa@redhat.com> 2.2.2-21
@@ -3069,7 +3069,7 @@ directories (bug 531901)
 - pick up OpenSSL cflags and ldflags from pkgconfig if available
 
 * Thu Jan  2 2003 Jeremy Katz <katzj@redhat.com> 2.2.2-8
-- urllib2 didn't support non-anonymous ftp.  add support based on how 
+- urllib2 didn't support non-anonymous ftp.  add support based on how
   urllib did it (#80676, #78168)
 
 * Mon Dec 16 2002 Mihai Ibanescu <misa@redhat.com> 2.2.2-7
@@ -3092,7 +3092,7 @@ directories (bug 531901)
 - Fixed configuration patch to add -lcrypt when compiling cryptmodule.c
 
 2.2.2-4
-- Spec file change from Matt Wilson <msw@redhat.com> to disable linking 
+- Spec file change from Matt Wilson <msw@redhat.com> to disable linking
   with the C++ compiler.
 
 * Mon Nov 11 2002 Mihai Ibanescu <misa@redhat.com>
@@ -3176,11 +3176,11 @@ directories (bug 531901)
 - 2.2.1 - a bugfix-only release
 
 * Fri Apr 12 2002 Trond Eivind Glomsrød <teg@redhat.com> 2.2-16
-- the same, but in builddirs - this will remove them from the 
+- the same, but in builddirs - this will remove them from the
   docs package, which doesn't look in the buildroot for files.
 
 * Fri Apr 12 2002 Trond Eivind Glomsrød <teg@redhat.com> 2.2-15
-- Get rid of temporary files and .cvsignores included 
+- Get rid of temporary files and .cvsignores included
   in the tarball and make install
 
 * Fri Apr  5 2002 Trond Eivind Glomsrød <teg@redhat.com> 2.2-14
@@ -3218,7 +3218,7 @@ directories (bug 531901)
   can happen when you mix db2 and db4 in a single application)
 
 * Thu Jan 24 2002 Trond Eivind Glomsrød <teg@redhat.com> 2.2-4
-- Obsolete subpackages if necesarry 
+- Obsolete subpackages if necesarry
 - provide versioned python2
 - build with db4
 
@@ -3231,7 +3231,7 @@ directories (bug 531901)
 
 * Fri Dec 14 2001 Trond Eivind Glomsrød <teg@redhat.com> 2.2-0.11c1
 - 2.2 RC 1
-- Don't include the _tkinter module in the main package - it's 
+- Don't include the _tkinter module in the main package - it's
   already in the tkiter packace
 - Turn off the mpzmodule, something broke in the buildroot
 

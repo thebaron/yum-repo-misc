@@ -77,7 +77,7 @@
 
 # We want to byte-compile the .py files within the packages using the new
 # python3 binary.
-# 
+#
 # Unfortunately, rpmbuild's infrastructure requires us to jump through some
 # hoops to avoid byte-compiling with the system python 2 version:
 #   /usr/lib/rpm/redhat/macros sets up build policy that (amongst other things)
@@ -207,15 +207,15 @@ Source3: macros.pybytecompile
 # Systemtap tapset to make it easier to use the systemtap static probes
 # (actually a template; LIBRARY_PATH will get fixed up during install)
 # Written by dmalcolm; not yet sent upstream
-Source5: libpython.stp
+Source5: libpython.python33.stp
 
 # Example systemtap script using the tapset
 # Written by wcohen, mjw, dmalcolm; not yet sent upstream
-Source6: systemtap-example.stp
+Source6: systemtap-example.python33.stp
 
 # Another example systemtap script that uses the tapset
 # Written by dmalcolm; not yet sent upstream
-Source7: pyfuntop.stp
+Source7: pyfuntop.python33.stp
 
 # SCL-custom version of pythondeps.sh
 # Append 33 to not collide with python27 SCL
@@ -238,20 +238,20 @@ Patch1:         Python-3.1.1-rpath.patch
 # Patch sent upstream as http://bugs.python.org/issue14776
 # with some subsequent reworking to cope with LANG=C in an rpmbuild
 # (where sys.getfilesystemencoding() == 'ascii')
-Patch55: 00055-systemtap.patch
+Patch55: 00055-systemtap.python33.patch
 
 Patch102: python-3.3.0b1-lib64.patch
 
 # 00104 #
 # Only used when "%{_lib}" == "lib64"
 # Another lib64 fix, for distutils/tests/test_install.py; not upstream:
-Patch104: 00104-lib64-fix-for-test_install.patch
+Patch104: 00104-lib64-fix-for-test_install.python33.patch
 
 # 00111 #
 # Patch the Makefile.pre.in so that the generated Makefile doesn't try to build
 # a libpythonMAJOR.MINOR.a (bug 550692):
 # Downstream only: not appropriate for upstream
-Patch111: 00111-no-static-lib.patch
+Patch111: 00111-no-static-lib.python33.patch
 
 # 00112 #
 # Patch112: python-2.7rc1-debug-build.patch: this is not relevant to Python 3,
@@ -263,13 +263,13 @@ Patch111: 00111-no-static-lib.patch
 # so that if they are enabled, they will be in that build's pyconfig.h, so that
 # extension modules will reliably use them
 # Not yet sent upstream
-Patch113: 00113-more-configuration-flags.patch
+Patch113: 00113-more-configuration-flags.python33.patch
 
 # 00114 #
 # Add flags for statvfs.f_flag to the constant list in posixmodule (i.e. "os")
 # (rhbz:553020); partially upstream as http://bugs.python.org/issue7647
 # Not yet sent upstream
-Patch114: 00114-statvfs-f_flag-constants.patch
+Patch114: 00114-statvfs-f_flag-constants.python33.patch
 
 # 00125 #
 # COUNT_ALLOCS is useful for debugging, but the upstream behaviour of always
@@ -277,7 +277,7 @@ Patch114: 00114-statvfs-f_flag-constants.patch
 # use the debug build.  Add a "PYTHONDUMPCOUNTS" environment variable which
 # must be set to enable the output on exit
 # Not yet sent upstream
-Patch125: 00125-less-verbose-COUNT_ALLOCS.patch
+Patch125: 00125-less-verbose-COUNT_ALLOCS.python33.patch
 
 # In my koji builds, /root/bin is in the PATH for some reason
 # This leads to test_subprocess.py failing, due to "test_leaking_fds_on_error"
@@ -300,7 +300,7 @@ Patch129: python-3.2.1-fix-test-subprocess-with-nonreadable-path-dir.patch
 # fail when built in Koji, for ppc and ppc64; for some reason, the SIGALRM
 # handlers are never called, and the call to write runs to completion
 # (rhbz#732998)
-Patch131: 00131-disable-tests-in-test_io.patch
+Patch131: 00131-disable-tests-in-test_io.python33.patch
 
 # 00132 #
 # Add non-standard hooks to unittest for use in the "check" phase below, when
@@ -314,7 +314,7 @@ Patch131: 00131-disable-tests-in-test_io.patch
 # environment, which we set manually in the appropriate portion of the "check"
 # phase below (and which potentially other python-* rpms could set, to reuse
 # these unittest hooks in their own "check" phases)
-Patch132: 00132-add-rpmbuild-hooks-to-unittest.patch
+Patch132: 00132-add-rpmbuild-hooks-to-unittest.python33.patch
 
 # 00133 #
 # 00133-skip-test_dl.patch is not relevant for python3: the "dl" module no
@@ -323,7 +323,7 @@ Patch132: 00132-add-rpmbuild-hooks-to-unittest.patch
 # 00134 #
 # Fix a failure in test_sys.py when configured with COUNT_ALLOCS enabled
 # Not yet sent upstream
-Patch134: 00134-fix-COUNT_ALLOCS-failure-in-test_sys.patch
+Patch134: 00134-fix-COUNT_ALLOCS-failure-in-test_sys.python33.patch
 
 # 00135 #
 # test_weakref's test_callback_in_cycle_resurrection doesn't work with
@@ -338,7 +338,7 @@ Patch135: 00135-fix-test-within-test_weakref-in-debug-build.patch
 
 # 00137 #
 # Some tests within distutils fail when run in an rpmbuild:
-Patch137: 00137-skip-distutils-tests-that-fail-in-rpmbuild.patch
+Patch137: 00137-skip-distutils-tests-that-fail-in-rpmbuild.python33.patch
 
 # 00138 #
 # Patch138: 00138-fix-distutils-tests-in-debug-build.patch is not relevant for
@@ -347,7 +347,7 @@ Patch137: 00137-skip-distutils-tests-that-fail-in-rpmbuild.patch
 # 00139 #
 # ARM-specific: skip known failure in test_float:
 #  http://bugs.python.org/issue8265 (rhbz#706253)
-Patch139: 00139-skip-test_float-known-failure-on-arm.patch
+Patch139: 00139-skip-test_float-known-failure-on-arm.python33.patch
 
 # 00140 #
 # Patch140: 00140-skip-test_ctypes-known-failure-on-sparc.patch does not appear
@@ -356,17 +356,17 @@ Patch139: 00139-skip-test_float-known-failure-on-arm.patch
 # 00141 #
 # Fix test_gc's test_newinstance case when configured with COUNT_ALLOCS:
 # Not yet sent upstream
-Patch141: 00141-fix-test_gc_with_COUNT_ALLOCS.patch
+Patch141: 00141-fix-test_gc_with_COUNT_ALLOCS.python33.patch
 
 # 00142 #
 # Some pty tests fail when run in mock (rhbz#714627):
-Patch142: 00142-skip-failing-pty-tests-in-rpmbuild.patch
+Patch142: 00142-skip-failing-pty-tests-in-rpmbuild.python33.patch
 
 # 00143 #
 # Fix the --with-tsc option on ppc64, and rework it on 32-bit ppc to avoid
 # aliasing violations (rhbz#698726)
 # Sent upstream as http://bugs.python.org/issue12872
-Patch143: 00143-tsc-on-ppc.patch
+Patch143: 00143-tsc-on-ppc.python33.patch
 
 # 00144 #
 # (Optionally) disable the gdbm module:
@@ -394,7 +394,7 @@ Patch143: 00143-tsc-on-ppc.patch
 # - don't build the _md5 and _sha* modules; rely on the _hashlib implementation
 #   of hashlib
 # (rhbz#563986)
-Patch146: 00146-hashlib-fips.patch
+Patch146: 00146-hashlib-fips.python33.patch
 
 # 00147 #
 # Add a sys._debugmallocstats() function
@@ -433,7 +433,7 @@ Patch150: 00150-disable-rAssertAlmostEqual-cmath-on-ppc.patch
 # when running test_gdb.py; also cope with change to gdb in F17 onwards in
 # which values are printed as "v@entry" rather than just "v":
 # Not yet sent upstream
-Patch153: 00153-fix-test_gdb-noise.patch
+Patch153: 00153-fix-test_gdb-noise.python33.patch
 
 # 00154 #
 # python3.spec on f15 has:
@@ -443,14 +443,14 @@ Patch153: 00153-fix-test_gdb-noise.patch
 # Avoid allocating thunks in ctypes unless absolutely necessary, to avoid
 # generating SELinux denials on "import ctypes" and "import uuid" when
 # embedding Python within httpd (rhbz#814391)
-Patch155: 00155-avoid-ctypes-thunks.patch
+Patch155: 00155-avoid-ctypes-thunks.python33.patch
 
 # 00156 #
 # Recent builds of gdb will only auto-load scripts from certain safe
 # locations.  Turn off this protection when running test_gdb in the selftest
 # suite to ensure that it can load our -gdb.py script (rhbz#817072):
 # Not yet sent upstream
-Patch156: 00156-gdb-autoload-safepath.patch
+Patch156: 00156-gdb-autoload-safepath.python33.patch
 
 # 00157 #
 # Update uid/gid handling throughout the standard library: uid_t and gid_t are
@@ -466,7 +466,7 @@ Patch156: 00156-gdb-autoload-safepath.patch
 # Update standard library to use this throughout for uid/gid values, so that
 # very large uid/gid values are round-trippable, and -1 remains usable.
 # (rhbz#697470)
-Patch157: 00157-uid-gid-overflows.patch
+Patch157: 00157-uid-gid-overflows.python33.patch
 
 # 00158 #
 # Upstream as of Python 3.3.1
@@ -536,7 +536,7 @@ Patch164: 00164-disable-interrupted_write-tests-on-ppc.patch
 # hiding the proposed new macros/functions within gcmodule.c to avoid exposing
 # them within the extension API.
 # (rhbz#850013)
-Patch170: 00170-gc-assertions.patch
+Patch170: 00170-gc-assertions.python33.patch
 
 # 00171 #
 # python.spec had:
@@ -551,7 +551,7 @@ Patch170: 00170-gc-assertions.patch
 # 00173 #
 # Workaround for ENOPROTOOPT seen in Koji withi test.support.bind_port()
 # (rhbz#913732)
-Patch173: 00173-workaround-ENOPROTOOPT-in-bind_port.patch
+Patch173: 00173-workaround-ENOPROTOOPT-in-bind_port.python33.patch
 
 # 00174 #
 #  Patch174: 00174-fix-for-usr-move.patch
@@ -590,7 +590,7 @@ Patch179: 00179-dont-raise-error-on-gdb-corrupted-frames-in-backtrace.patch
 # 00180 #
 # Enable building on ppc64p7
 # Not appropriate for upstream, Fedora-specific naming
-Patch180: 00180-python-add-support-for-ppc64p7.patch
+Patch180: 00180-python-add-support-for-ppc64p7.python33.patch
 
 # 00181 #
 # python.spec has
@@ -640,7 +640,7 @@ Patch185: 00185-CVE-2013-4238-hostname-check-bypass-in-SSL-module.patch
 # This is the generated patch to "configure"; see the description of
 #   %{regenerate_autotooling_patch}
 # above:
-Patch5000: 05000-autotool-intermediates.patch
+Patch5000: 05000-autotool-intermediates.python33.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 
@@ -691,7 +691,7 @@ Requires: %{?scl_prefix}%{pkg_name}%{?_isa} = %{version}-%{release}
 Conflicts: %{?scl_prefix}%{pkg_name} < %{version}-%{release}
 
 %description devel
-This package contains libraries and header files used to build applications 
+This package contains libraries and header files used to build applications
 with and native libraries for Python 3
 
 %package tools
@@ -941,7 +941,7 @@ exit 1
 # Define a function, for how to perform a "build" of python for a given
 # configuration:
 BuildPython() {
-  ConfName=$1	      
+  ConfName=$1
   BinaryName=$2
   SymlinkName=$3
   ExtraConfigArgs=$4
@@ -1029,7 +1029,7 @@ mkdir -p %{buildroot}%{_prefix} %{buildroot}%{_mandir}
 
 InstallPython() {
 
-  ConfName=$1	      
+  ConfName=$1
   PyInstSoName=$2
   MoreCFlags=$3
 
@@ -1214,7 +1214,7 @@ find %{buildroot}/ -name \*.py -exec sed -i 's/\r//' {} \;
 # Fix an encoding:
 iconv -f iso8859-1 -t utf-8 %{buildroot}/%{pylibdir}/Demo/rpc/README > README.conv && mv -f README.conv %{buildroot}/%{pylibdir}/Demo/rpc/README
 
-# Note that 
+# Note that
 #  %{pylibdir}/Demo/distutils/test2to3/setup.py
 # is in iso-8859-1 encoding, and that this is deliberate; this is test data
 # for the 2to3 tool, and one of the functions of the 2to3 tool is to fixup
@@ -1260,7 +1260,7 @@ for Module in %{buildroot}/%{dynload_dir}/*.so ; do
     *.%{SOABI_debug})
         ldd $Module | grep %{py_INSTSONAME_optimized} &&
             (echo Debug module $Module linked against optimized %{py_INSTSONAME_optimized} ; exit 1)
-            
+
         ;;
     *.%{SOABI_optimized})
         ldd $Module | grep %{py_INSTSONAME_debug} &&
@@ -1295,7 +1295,7 @@ mkdir -p %{buildroot}%{tapsetdir}
 
 sed \
    -e "s|LIBRARY_PATH|%{_libdir}/%{py_INSTSONAME_optimized}|" \
-   %{_sourcedir}/libpython.stp \
+   %{_sourcedir}/libpython.python33.stp \
    > %{buildroot}%{tapsetdir}/%{libpython_stp_optimized}
 
 %if 0%{?with_debug_build}
@@ -1305,7 +1305,7 @@ sed \
 sed \
    -e "s|LIBRARY_PATH|%{_libdir}/%{py_INSTSONAME_debug}|" \
    -e 's|"python3"|"python3-debug"|' \
-   %{_sourcedir}/libpython.stp \
+   %{_sourcedir}/libpython.python33.stp \
    > %{buildroot}%{tapsetdir}/%{libpython_stp_debug}
 %endif # with_debug_build
 
@@ -1343,7 +1343,7 @@ export topdir=$(pwd)
 # => Disabling test before finding a better solution.
 mv Lib/test/test_gdb.py Lib/test/test_gdb.py.notest
 CheckPython() {
-  ConfName=$1	      
+  ConfName=$1
   ConfDir=$(pwd)/build/$ConfName
 
   echo STARTING: CHECKING OF PYTHON FOR CONFIGURATION: $ConfName
@@ -1593,7 +1593,7 @@ rm -fr %{buildroot}
 %{?scl:%dir %{_datadir}/systemtap}
 %{?scl:%dir %{tapsetdir}}
 %{tapsetdir}/%{libpython_stp_optimized}
-%doc systemtap-example.stp pyfuntop.stp
+%doc systemtap-example.python33.stp pyfuntop.python33.stp
 %endif
 
 %files devel
@@ -1763,15 +1763,15 @@ rm -fr %{buildroot}
 
 # We put the debug-gdb.py file inside /usr/lib/debug to avoid noise from
 # ldconfig (rhbz:562980).
-# 
+#
 # The /usr/lib/rpm/redhat/macros defines %__debug_package to use
 # debugfiles.list, and it appears that everything below /usr/lib/debug and
 # (/usr/src/debug) gets added to this file (via LISTFILES) in
 # /usr/lib/rpm/find-debuginfo.sh
-# 
+#
 # Hence by installing it below /usr/lib/debug we ensure it is added to the
 # -debuginfo subpackage
-# (if it doesn't, then the rpmbuild ought to fail since the debug-gdb.py 
+# (if it doesn't, then the rpmbuild ought to fail since the debug-gdb.py
 # payload file would be unpackaged)
 
 
@@ -1972,7 +1972,7 @@ ppc to avoid aliasing violations (patch 130; rhbz#698726)
 - add %%python3_version to the rpm macros (rhbz#719082)
 
 * Mon Jul 11 2011 Dennis Gilmore <dennis@ausil.us> - 3.2.1-2
-- disable some tests on sparc arches 
+- disable some tests on sparc arches
 
 * Mon Jul 11 2011 David Malcolm <dmalcolm@redhat.com> - 3.2.1-1
 - 3.2.1; refresh lib64 patch (102), subprocess unit test patch (129), disabling
