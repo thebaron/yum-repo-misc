@@ -1,7 +1,7 @@
-diff -up Python-3.2.3/Lib/ctypes/__init__.py.rhbz814391 Python-3.2.3/Lib/ctypes/__init__.py
---- Python-3.2.3/Lib/ctypes/__init__.py.rhbz814391	2012-04-20 15:12:49.017867692 -0400
-+++ Python-3.2.3/Lib/ctypes/__init__.py	2012-04-20 15:15:09.501111408 -0400
-@@ -275,11 +275,6 @@ def _reset_cache():
+diff -up Python-2.7.3/Lib/ctypes/__init__.py.rhbz814391 Python-2.7.3/Lib/ctypes/__init__.py
+--- Python-2.7.3/Lib/ctypes/__init__.py.rhbz814391	2012-04-20 14:51:19.390990244 -0400
++++ Python-2.7.3/Lib/ctypes/__init__.py	2012-04-20 14:51:45.141668316 -0400
+@@ -272,11 +272,6 @@ def _reset_cache():
      # _SimpleCData.c_char_p_from_param
      POINTER(c_char).from_param = c_char_p.from_param
      _pointer_type_cache[None] = c_void_p
@@ -11,5 +11,5 @@ diff -up Python-3.2.3/Lib/ctypes/__init__.py.rhbz814391 Python-3.2.3/Lib/ctypes/
 -    # compiled with the MS SDK compiler.  Or an uninitialized variable?
 -    CFUNCTYPE(c_int)(lambda: None)
  
- def create_unicode_buffer(init, size=None):
-     """create_unicode_buffer(aString) -> character array
+ try:
+     from _ctypes import set_conversion_mode

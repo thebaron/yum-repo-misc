@@ -1,18 +1,18 @@
-diff -up cpython-59223da36dec/Makefile.pre.in.no-static-lib cpython-59223da36dec/Makefile.pre.in
---- cpython-59223da36dec/Makefile.pre.in.no-static-lib	2012-08-07 16:43:43.296466422 -0400
-+++ cpython-59223da36dec/Makefile.pre.in	2012-08-07 16:44:13.299464371 -0400
-@@ -464,7 +464,7 @@ coverage:
+diff -up Python-2.7rc1/Makefile.pre.in.no-static-lib Python-2.7rc1/Makefile.pre.in
+--- Python-2.7rc1/Makefile.pre.in.no-static-lib	2010-06-06 14:47:52.929975429 -0400
++++ Python-2.7rc1/Makefile.pre.in	2010-06-06 14:48:34.163350302 -0400
+@@ -393,7 +393,7 @@ coverage:
  
  
  # Build the interpreter
--$(BUILDPYTHON):	Modules/python.o $(LIBRARY) $(LDLIBRARY) $(PY3LIBRARY)
-+$(BUILDPYTHON):	Modules/python.o $(LDLIBRARY) $(PY3LIBRARY)
- 	$(LINKCC) $(PY_LDFLAGS) $(LINKFORSHARED) -o $@ Modules/python.o $(BLDLIBRARY) $(LIBS) $(MODLIBS) $(SYSLIBS) $(LDLAST)
- 
- platform: $(BUILDPYTHON) pybuilddir.txt
-@@ -480,18 +480,6 @@ sharedmods: $(BUILDPYTHON) $(SYSCONFIGDA
- 	$(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' OPT='$(OPT)' \
- 		$(PYTHON_FOR_BUILD) $(srcdir)/setup.py $$quiet build
+-$(BUILDPYTHON):	Modules/python.o $(LIBRARY) $(LDLIBRARY)
++$(BUILDPYTHON):	Modules/python.o $(LDLIBRARY)
+ 		$(LINKCC) $(CFLAGS) $(LDFLAGS) $(LINKFORSHARED) -o $@ \
+ 			Modules/python.o \
+ 			$(BLDLIBRARY) $(LIBS) $(MODLIBS) $(SYSLIBS) $(LDLAST)
+@@ -409,18 +409,6 @@ sharedmods: $(BUILDPYTHON)
+ 	*) $(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' LDFLAGS='$(LDFLAGS)' OPT='$(OPT)' ./$(BUILDPYTHON) -E $(srcdir)/setup.py build;; \
+ 	esac
  
 -# Build static library
 -# avoid long command lines, same as LIBRARY_OBJS
@@ -21,30 +21,21 @@ diff -up cpython-59223da36dec/Makefile.pre.in.no-static-lib cpython-59223da36dec
 -	$(AR) $(ARFLAGS) $@ Modules/getbuildinfo.o
 -	$(AR) $(ARFLAGS) $@ $(PARSER_OBJS)
 -	$(AR) $(ARFLAGS) $@ $(OBJECT_OBJS)
--	$(AR) $(ARFLAGS) $@ $(PYTHON_OBJS) Python/frozen.o
+-	$(AR) $(ARFLAGS) $@ $(PYTHON_OBJS)
 -	$(AR) $(ARFLAGS) $@ $(MODULE_OBJS) $(SIGNAL_OBJS)
 -	$(AR) $(ARFLAGS) $@ $(MODOBJS)
 -	$(RANLIB) $@
 -
- libpython$(LDVERSION).so: $(LIBRARY_OBJS)
+ libpython$(VERSION).so: $(LIBRARY_OBJS)
  	if test $(INSTSONAME) != $(LDLIBRARY); then \
- 		$(BLDSHARED) -Wl,-h$(INSTSONAME) -o $(INSTSONAME) $(LIBRARY_OBJS) $(MODLIBS) $(SHLIBS) $(LIBC) $(LIBM) $(LDLAST); \
-@@ -581,7 +569,7 @@ Modules/Setup: $(srcdir)/Modules/Setup.d
- 		echo "-----------------------------------------------"; \
- 	fi
- 
--Modules/_testembed: Modules/_testembed.o $(LIBRARY) $(LDLIBRARY) $(PY3LIBRARY)
-+Modules/_testembed: Modules/_testembed.o $(LDLIBRARY) $(PY3LIBRARY)
- 	$(LINKCC) $(PY_LDFLAGS) $(LINKFORSHARED) -o $@ Modules/_testembed.o $(BLDLIBRARY) $(LIBS) $(MODLIBS) $(SYSLIBS) $(LDLAST)
- 
- ############################################################################
-@@ -1155,18 +1143,6 @@ libainstall:	all python-config
+ 		$(LDSHARED) $(LDFLAGS) -Wl,-h$(INSTSONAME) -o $(INSTSONAME) $(LIBRARY_OBJS) $(MODLIBS) $(SHLIBS) $(LIBC) $(LIBM) $(LDLAST); \
+@@ -1002,18 +990,6 @@ libainstall:	all python-config
  		else	true; \
  		fi; \
  	done
 -	@if test -d $(LIBRARY); then :; else \
 -		if test "$(PYTHONFRAMEWORKDIR)" = no-framework; then \
--			if test "$(SHLIB_SUFFIX)" = .dll; then \
+-			if test "$(SO)" = .dll; then \
 -				$(INSTALL_DATA) $(LDLIBRARY) $(DESTDIR)$(LIBPL) ; \
 -			else \
 -				$(INSTALL_DATA) $(LIBRARY) $(DESTDIR)$(LIBPL)/$(LIBRARY) ; \

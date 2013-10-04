@@ -4,7 +4,7 @@
 %global upstream_name nose
 
 # Enable building without docs to avoid a circular dependency between this and python-sphinx
-%global with_docs 1
+%global with_docs 0
 
 Name:           %{?scl_prefix}python-nose
 Version:        1.2.1

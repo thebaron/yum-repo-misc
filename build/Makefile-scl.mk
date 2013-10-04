@@ -1272,12 +1272,14 @@ python27-python-werkzeug:
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
-.PHONY: python33-all
-python33-all: python33 python33-python python33-setuptools \
-	python33-docutils python33-MySQL-python python33-coverage \
-	python33-markupsafe python33-nose python33-jinja2 python33-babel \
-	python33-sphinx python33-pip python33-pygments python33-virtualenv \
-	python33-mod_wsgi python33-psycopg2
+.PHONY: python33-python-all
+python33-all: python33 python33-python python33-python-setuptools \
+	python33-python-docutils python33-python-coverage \
+	python33-python-markupsafe python33-python-nose python33-python-jinja2 \
+  python33-python-sphinx python33-python-pip \
+	python33-python-pygments python33-python-virtualenv \
+	python33-python-simplejson python33-python-sqlalchemy \
+	python33-mod_wsgi python33-python-psycopg2
 
 
 .PHONY: python33
@@ -1286,84 +1288,96 @@ python33:
 	mock $(SCL_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python33-1-6.el$(EPEL_VERSION).src.rpm
 	make EPEL_VERSION=$(EPEL_VERSION) createrepo
 
-.PHONY: python33
-python33:
-	mock $(PYTHON33_OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/python33.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
-	mock $(PYTHON33_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python33-3.3.2-7.el$(EPEL_VERSION).src.rpm
+.PHONY: python33-python
+python33-python:
+	mock $(PYTHON33_OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/python33-python.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
+	mock $(PYTHON33_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python33-python-3.3.2-7.el$(EPEL_VERSION).src.rpm
 	make EPEL_VERSION=$(EPEL_VERSION) createrepo
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-.PHONY: python33-coverage
-python33-coverage:
+.PHONY: python33-python-coverage
+python33-python-coverage:
 	mock $(PYTHON33_OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/python33-coverage.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
-	mock $(PYTHON33_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python33-coverage-3.5.3-2.el$(EPEL_VERSION).src.rpm
+	mock $(PYTHON33_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python33-python-coverage-3.5.3-2.el$(EPEL_VERSION).src.rpm
 	make EPEL_VERSION=$(EPEL_VERSION) createrepo
 
-.PHONY: python33-docutils
-python33-docutils:
+.PHONY: python33-python-docutils
+python33-python-docutils:
 	mock $(PYTHON33_OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/python33-docutils.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
-	mock $(PYTHON33_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python33-docutils-0.10-4.el$(EPEL_VERSION).src.rpm
+	mock $(PYTHON33_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python33-python-docutils-0.10-4.el$(EPEL_VERSION).src.rpm
 	make EPEL_VERSION=$(EPEL_VERSION) createrepo
 
-.PHONY: python33-jinja2
-python33-jinja2:
+.PHONY: python33-python-jinja2
+python33-python-jinja2:
 	mock $(PYTHON33_OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/python33-jinja2.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
-	mock $(PYTHON33_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python33-jinja2-2.6-10.el$(EPEL_VERSION).src.rpm
+	mock $(PYTHON33_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python33-python-jinja2-2.6-10.el$(EPEL_VERSION).src.rpm
 	make EPEL_VERSION=$(EPEL_VERSION) createrepo
 
-.PHONY: python33-markupsafe
-python33-markupsafe:
+.PHONY: python33-python-markupsafe
+python33-python-markupsafe:
 	mock $(PYTHON33_OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/python33-markupsafe.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
-	mock $(PYTHON33_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python33-markupsafe-0.11-10.el$(EPEL_VERSION).src.rpm
+	mock $(PYTHON33_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python33-python-markupsafe-0.11-10.el$(EPEL_VERSION).src.rpm
 	make EPEL_VERSION=$(EPEL_VERSION) createrepo
 
-.PHONY: python33-nose
-python33-nose:
+.PHONY: python33-mod_wsgi
+python33-mod_wsgi:
+	mock $(PYTHON33_OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/python33-mod_wsgi.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
+	mock $(PYTHON33_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python33-mod_wsgi-3.4-2.ius.el$(EPEL_VERSION).src.rpm
+	make EPEL_VERSION=$(EPEL_VERSION) createrepo
+
+.PHONY: python33-python-nose
+python33-python-nose:
 	mock $(PYTHON33_OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/python33-nose.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
-	mock $(PYTHON33_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python33-nose-1.2.1-6.el$(EPEL_VERSION).src.rpm
+	mock $(PYTHON33_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python33-python-nose-1.2.1-6.el$(EPEL_VERSION).src.rpm
 	make EPEL_VERSION=$(EPEL_VERSION) createrepo
 
-.PHONY: python33-psycopg2
-python33-psycopg2:
+.PHONY: python33-python-pip
+python33-python-pip:
+	mock $(PYTHON33_OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/python33-pip.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
+	mock $(PYTHON33_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python33-python-pip-1.4.1-1.el$(EPEL_VERSION).src.rpm
+	make EPEL_VERSION=$(EPEL_VERSION) createrepo
+
+.PHONY: python33-python-psycopg2
+python33-python-psycopg2:
 	mock $(PYTHON33_OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/python33-psycopg2.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
-	mock $(PYTHON33_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python33-psycopg2-2.4.5-10.el$(EPEL_VERSION).src.rpm
+	mock $(PYTHON33_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python33-python-psycopg2-2.4.5-10.el$(EPEL_VERSION).src.rpm
 	make EPEL_VERSION=$(EPEL_VERSION) createrepo
 
-.PHONY: python33-pygments
-python33-pygments:
+.PHONY: python33-python-pygments
+python33-python-pygments:
 	mock $(PYTHON33_OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/python33-pygments.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
-	mock $(PYTHON33_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python33-pygments-1.5-3.el$(EPEL_VERSION).src.rpm
+	mock $(PYTHON33_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python33-python-pygments-1.5-3.el$(EPEL_VERSION).src.rpm
 	make EPEL_VERSION=$(EPEL_VERSION) createrepo
 
-.PHONY: python33-setuptools
-python33-setuptools:
+.PHONY: python33-python-setuptools
+python33-python-setuptools:
 	mock $(PYTHON33_OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/python33-setuptools.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
-	mock $(PYTHON33_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python33-setuptools-0.6.28-7.el$(EPEL_VERSION).src.rpm
+	mock $(PYTHON33_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python33-python-setuptools-0.6.28-7.el$(EPEL_VERSION).src.rpm
 	make EPEL_VERSION=$(EPEL_VERSION) createrepo
 
-.PHONY: python33-simplejson
-python33-simplejson:
+.PHONY: python33-python-simplejson
+python33-python-simplejson:
 	mock $(PYTHON33_OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/python33-simplejson.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
-	mock $(PYTHON33_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python33-simplejson-3.0.5-2.el$(EPEL_VERSION).src.rpm
+	mock $(PYTHON33_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python33-python-simplejson-3.0.5-2.el$(EPEL_VERSION).src.rpm
 	make EPEL_VERSION=$(EPEL_VERSION) createrepo
 
-.PHONY: python33-sphinx
-python33-sphinx:
+.PHONY: python33-python-sphinx
+python33-python-sphinx:
 	mock $(PYTHON33_OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/python33-sphinx.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
-	mock $(PYTHON33_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python33-sphinx-1.1.3-8.el$(EPEL_VERSION).src.rpm
+	mock $(PYTHON33_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python33-python-sphinx-1.1.3-8.el$(EPEL_VERSION).src.rpm
 	make EPEL_VERSION=$(EPEL_VERSION) createrepo
 
-.PHONY: python33-sqlalchemy
-python33-sqlalchemy:
+.PHONY: python33-python-sqlalchemy
+python33-python-sqlalchemy:
 	mock $(PYTHON33_OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/python33-sqlalchemy.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
-	mock $(PYTHON33_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python33-sqlalchemy-0.7.9-3.el$(EPEL_VERSION).src.rpm
+	mock $(PYTHON33_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python33-python-sqlalchemy-0.7.9-3.el$(EPEL_VERSION).src.rpm
 	make EPEL_VERSION=$(EPEL_VERSION) createrepo
 
-.PHONY: python33-virtualenv
-python33-virtualenv:
+.PHONY: python33-python-virtualenv
+python33-python-virtualenv:
 	mock $(PYTHON33_OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/python33-virtualenv.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
-	mock $(PYTHON33_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python33-virtualenv-1.10.1-1.el$(EPEL_VERSION).src.rpm
+	mock $(PYTHON33_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/python33-python-virtualenv-1.10.1-1.el$(EPEL_VERSION).src.rpm
 	make EPEL_VERSION=$(EPEL_VERSION) createrepo
 
 

@@ -3,7 +3,7 @@
 
 # Enable building without docs to avoid a circular dependency between this
 # and python-sphinx:
-%global with_docs 1
+%global with_docs 0
 
 Name:		%{?scl_prefix}python-jinja2
 Version:	2.6
@@ -165,7 +165,7 @@ dependency with python-sphinx; disable docs for now
 
 * Tue Jul 13 2010 Thomas Moschny <thomas.moschny@gmx.de> - 2.5-1
 - Update to upstream version 2.5.
-- Create python3 subpackage. 
+- Create python3 subpackage.
 - Minor specfile fixes.
 - Add examples directory.
 - Thanks to Gareth Armstrong for additional hints.
