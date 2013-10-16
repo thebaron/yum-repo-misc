@@ -1,9 +1,11 @@
 
 EPEL_VERSION=6
 
-#OPTIONS="-r epel-5-x86_64 --no-cleanup-after --no-clean"
-#OPTIONS="-r epel-5-x86_64 --no-clean"
-#OPTIONS=-r epel-5-x86_64 --no-cleanup-after --offline --verbose
+OTHER_OPTIONS=""
+# OTHER_OPTIONS="--no-clean --no-cleanup-after --verbose"
+# OTHER_OPTIONS="-r epel-5-x86_64 --no-cleanup-after --no-clean"
+# OTHER_OPTIONS="-r epel-5-x86_64 --no-clean"
+# OTHER_OPTIONS="-r epel-5-x86_64 --no-cleanup-after --offline --verbose"
 
 # for Centos5
 # OPTIONS=-r epel-5-x86_64 --verbose
@@ -12,38 +14,37 @@ EPEL_VERSION=6
 # OPTIONS=-r epel-6-x86_64 --verbose
 
 # For universal build version
-OPTIONS=-r epel-$(EPEL_VERSION)-x86_64
-
+OPTIONS=-r epel-$(EPEL_VERSION)-x86_64 $(OTHER_OPTIONS)
 
 # used for building the build packages, like python27-build and ruby193-build
-SCL_OPTIONS=-r scl-x86_64
+SCL_OPTIONS=-r scl-x86_64 $(OTHER_OPTIONS)
 
 # used for building python27 SCL-based packages
-PYTHON27_OPTIONS=-r python27-x86_64
+PYTHON27_OPTIONS=-r python27-x86_64 $(OTHER_OPTIONS)
 
 # used for building python33 SCL-based packages
-PYTHON33_OPTIONS=-r python33-x86_64
+PYTHON33_OPTIONS=-r python33-x86_64 $(OTHER_OPTIONS)
 
 # used for bulding ruby193 SCL-based packages
-RUBY193_OPTIONS=-r ruby193-x86_64 --no-cleanup-after --verbose
+RUBY193_OPTIONS=-r ruby193-x86_64 $(OTHER_OPTIONS)
 
 # used for bulding Postgres 9.2 SCL-based packages
-POSTGRES92_OPTIONS=-r postgres92-x86_64
+POSTGRES92_OPTIONS=-r postgres92-x86_64 $(OTHER_OPTIONS)
 
 # used for bulding Perl 5.16 SCL-based packages
-PERL516_OPTIONS=-r perl516-x86_64
+PERL516_OPTIONS=-r perl516-x86_64 $(OTHER_OPTIONS)
 
 # used for bulding Node 0.10 SCL-based packages
-NODE010_OPTIONS=-r node010-x86_64
+NODE010_OPTIONS=-r node010-x86_64 $(OTHER_OPTIONS)
 
 # used for bulding PHP 5.4 SCL-based packages
-PHP54_OPTIONS=-r php54-x86_64
+PHP54_OPTIONS=-r php54-x86_64 $(OTHER_OPTIONS)
 
 # used for bulding MySQL 5.5 SCL-based packages
-MYSQL55_OPTIONS=-r mysql55-x86_64
+MYSQL55_OPTIONS=-r mysql55-x86_64 $(OTHER_OPTIONS)
 
 # used for bulding MariaDB 5.5 SCL-based packages
-MARIADB55_OPTIONS=-r maria55db-x86_64
+MARIADB55_OPTIONS=-r maria55db-x86_64 $(OTHER_OPTIONS)
 
 
 
@@ -76,10 +77,16 @@ default:
 # updates the repo
 .PHONY: createrepo
 createrepo:
-	echo Updating epel-$(EPEL_VERSION) repository...
-	mkdir -p ~/localrepo/epel/$(EPEL_VERSION)/x86_64/
-	cd $(ROOT)/RPMS/ && find . -name \*.rpm | cpio -dpvm /home/vagrant/localrepo/epel/$(EPEL_VERSION)/x86_64/
-	createrepo ~/localrepo/epel/$(EPEL_VERSION)/x86_64/
+	echo Updating epel-$(EPEL_VERSION) repositories for x86_64, noarch, and SRPMS...
+	mkdir -p ~vagrant/localrepo/epel/$(EPEL_VERSION)/x86_64/
+	cd $(ROOT)/RPMS/ && find . -name \*.el$(EPEL_VERSION)\*x86_64\*.rpm | cpio -dpvm /home/vagrant/localrepo/epel/$(EPEL_VERSION)/x86_64/
+	createrepo ~vagrant/localrepo/epel/$(EPEL_VERSION)/x86_64/
+	mkdir -p ~vagrant/localrepo/epel/$(EPEL_VERSION)/noarch/
+	cd $(ROOT)/RPMS/ && find . -name \*.el$(EPEL_VERSION)\*noarch\*.rpm | cpio -dpvm /home/vagrant/localrepo/epel/$(EPEL_VERSION)/noarch/
+	createrepo ~vagrant/localrepo/epel/$(EPEL_VERSION)/noarch/
+	mkdir -p ~vagrant/localrepo/epel/$(EPEL_VERSION)/SRPMS/
+	cd $(ROOT)/SRPMS/ && find . -name \*.el$(EPEL_VERSION)\*.src.rpm | cpio -dpvm /home/vagrant/localrepo/epel/$(EPEL_VERSION)/SRPMS/
+	createrepo ~vagrant/localrepo/epel/$(EPEL_VERSION)/SRPMS/
 
 .PHONY:
 hdf5:

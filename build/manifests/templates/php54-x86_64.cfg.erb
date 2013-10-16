@@ -57,11 +57,32 @@ mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=epel-debug-6&arch=x8
 failovermethod=priority
 enabled=0
 
-[localrepo]
+[localrepo-el6-x86_64]
 name=local repo for dependencies
 enabled=1
 baseurl=file:///home/vagrant/localrepo/epel/6/x86_64/
 cost=0
 metadata_expire=0
+
+[localrepo-el6-x86_64]
+name=local repo for dependencies
+enabled=1
+baseurl=file:///home/vagrant/localrepo/epel/6/noarch/
+cost=0
+metadata_expire=0
+
+[epel-easel]
+name=Easel EPEL - 6 - x86_64
+baseurl=http://easel.github.com/yum-repo-misc/epel/6/x86_64/
+failovermethod=priority
+enabled=1
+gpgcheck=0
+
+[epel-easel-noarch]
+name=Easel EPEL - 6 - noarch
+baseurl=http://easel.github.com/yum-repo-misc/epel/6/noarch/
+failovermethod=priority
+enabled=1
+gpgcheck=0
 
 """

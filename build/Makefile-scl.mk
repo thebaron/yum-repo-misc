@@ -1122,7 +1122,7 @@ postgresql92:
 .PHONY: postgresql92-postgresql
 postgresql92-postgresql:
 	mock $(POSTGRES92_OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/postgresql.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
-	mock $(POSTGRES92_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/postgresql-9.2.4-7.el$(EPEL_VERSION).src.rpm
+	mock $(POSTGRES92_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/postgresql92-postgresql-9.2.4-7.el$(EPEL_VERSION).src.rpm
 	make EPEL_VERSION=$(EPEL_VERSION) createrepo
 
 

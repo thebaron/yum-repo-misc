@@ -172,7 +172,7 @@ Requires(postun): glibc
 %{?scl:Requires:%scl_runtime}
 
 %description libs
-The postgresql-libs package provides the essential shared libraries for any 
+The postgresql-libs package provides the essential shared libraries for any
 PostgreSQL client program or interface. You will need to install this package
 to use any other PostgreSQL package or any clients that need to connect to a
 PostgreSQL server.
@@ -339,7 +339,7 @@ cp -p %{SOURCE1} .
 
 # We need to add an extra setting of SCL environment into the service file
 # and some checks into scripts that can be possibly run without scl enable,
-# but only if we build the package in SCL environment. 
+# but only if we build the package in SCL environment.
 cp -p %{SOURCE16} .
 %if 0%{?scl:1}
 # When scl_sed_patches set to 0, macros won't be replaced, useful for edit
@@ -713,8 +713,8 @@ cat postgres-%{majorversion}.lang >>server.lst
 cat psql-%{majorversion}.lang >>main.lst
 %endif
 
-%post libs -p /sbin/ldconfig 
-%postun libs -p /sbin/ldconfig 
+%post libs -p /sbin/ldconfig
+%postun libs -p /sbin/ldconfig
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -1756,5 +1756,5 @@ Resolves: #161470
 - Default to compiling libpq and ECPG as fully thread-safe
 
 - 7.4 Origin.  See previous spec files for previous history. Adapted
-- from Red Hat and PGDG's 7.3.4 RPM, directly descended from 
+- from Red Hat and PGDG's 7.3.4 RPM, directly descended from
 - postgresql-7.3.4-2 as shipped in Fedora Core 1.
