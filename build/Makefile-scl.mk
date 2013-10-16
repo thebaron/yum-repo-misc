@@ -1110,7 +1110,7 @@ php54-php-pecl-memcache:
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 .PHONY: postgresql92-all
-postgresql92-all: postgresql92 postgresql92-postgresql
+postgresql92-all: postgresql92 postgresql92-postgresql postgresql92-postgis
 
 
 .PHONY: postgresql92
@@ -1125,7 +1125,23 @@ postgresql92-postgresql:
 	mock $(POSTGRES92_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/postgresql92-postgresql-9.2.4-7.el$(EPEL_VERSION).src.rpm
 	make EPEL_VERSION=$(EPEL_VERSION) createrepo
 
+.PHONY: postgresql92-postgis
+postgresql92-postgis:
+	mock $(POSTGRES92_OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/postgis.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
+	mock $(POSTGRES92_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/postgresql92-postgis-2.0.3-2.el$(EPEL_VERSION).src.rpm
+	make EPEL_VERSION=$(EPEL_VERSION) createrepo
 
+.PHONY: gdal
+gdal:
+	mock $(POSTGRES92_OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/gdal.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
+	mock $(POSTGRES92_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/gdal-1.9.2-8.el$(EPEL_VERSION).src.rpm
+	make EPEL_VERSION=$(EPEL_VERSION) createrepo
+
+.PHONY: libwebp
+libwebp:
+	mock $(POSTGRES92_OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/libwebp.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
+	mock $(POSTGRES92_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/libwebp-0.3.0-2.el$(EPEL_VERSION).src.rpm
+	make EPEL_VERSION=$(EPEL_VERSION) createrepo
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #

@@ -1,7 +1,7 @@
 
 EPEL_VERSION=6
 
-OTHER_OPTIONS=""
+OTHER_OPTIONS=
 # OTHER_OPTIONS="--no-clean --no-cleanup-after --verbose"
 # OTHER_OPTIONS="-r epel-5-x86_64 --no-cleanup-after --no-clean"
 # OTHER_OPTIONS="-r epel-5-x86_64 --no-clean"
