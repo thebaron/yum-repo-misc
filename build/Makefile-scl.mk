@@ -1466,7 +1466,8 @@ ruby193-gems-all: \
 	ruby193-rubygem-actionpack \
 	ruby193-rubygem-actionmailer \
 	ruby193-rubygem-coffee-rails \
-	ruby193-rubygem-sass-twitter-bootstrap
+	ruby193-rubygem-sass-twitter-bootstrap \
+	ruby193-rubygem-test-unit
 
 ruby193-gems-openshift-deps: \
 	ruby193-rubygem-chunky_png \
@@ -2125,3 +2126,11 @@ ruby193-rubygem-minitest:
 	mock $(RUBY193_OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/rubygem-minitest.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
 	mock $(RUBY193_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/ruby193-rubygem-minitest-3.5.0-3.el$(EPEL_VERSION).src.rpm
 	make EPEL_VERSION=$(EPEL_VERSION) createrepo
+
+.PHONY: ruby193-rubygem-test-unit
+ruby193-rubygem-test-unit:
+	mock $(RUBY193_OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/rubygem-test-unit.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
+	mock $(RUBY193_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/ruby193-rubygem-test-unit-2.4.1-2.el$(EPEL_VERSION).src.rpm
+	make EPEL_VERSION=$(EPEL_VERSION) createrepo
+
+
