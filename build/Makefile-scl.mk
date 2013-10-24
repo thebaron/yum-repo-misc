@@ -1492,7 +1492,7 @@ ruby193-gems-openshift-deps: \
 	ruby193-rubygem-hoe \
 	ruby193-rubygem-hoe-highline \
 	ruby193-rubygem-hoe-mercurial \
-	ruby193-rubygem-http-parser \
+	ruby193-rubygem-http_parser \
 	ruby193-rubygem-json_pure \
 	ruby193-rubygem-nokogiri \
 	ruby193-rubygem-poltergeist \
@@ -2036,10 +2036,10 @@ ruby193-rubygem-hoe-mercurial:
 	mock $(RUBY193_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/ruby193-rubygem-hoe-mercurial-1.4.0-1.el$(EPEL_VERSION).src.rpm
 	make EPEL_VERSION=$(EPEL_VERSION) createrepo
 
-.PHONY: ruby193-rubygem-http-parser
-ruby193-rubygem-http-parser:
-	mock $(RUBY193_OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/http-parser.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
-	mock $(RUBY193_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/ruby193-http-parser-2.0-5.20121128gitcd01361.el$(EPEL_VERSION).src.rpm
+.PHONY: ruby193-rubygem-http_parser
+ruby193-rubygem-http_parser:
+	mock $(RUBY193_OPTIONS) --buildsrpm --spec=$(ROOT)/SPECS/rubygem-http_parser.rb.spec --sources $(ROOT)/SOURCES --resultdir=$(ROOT)/SRPMS
+	mock $(RUBY193_OPTIONS) --rebuild --resultdir=$(ROOT)/RPMS $(ROOT)/SRPMS/ruby193-rubygem-http_parser.rb-0.5.3-2.el$(EPEL_VERSION).src.rpm
 	make EPEL_VERSION=$(EPEL_VERSION) createrepo
 
 .PHONY: ruby193-rubygem-json_pure
